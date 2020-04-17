@@ -137,5 +137,13 @@ public class Clock {
 	private static final long getCurrentTime() {
 		return (System.nanoTime() / 1000000L);
 	}
+	
+	public int getElapsedCycles() {
+		return elapsedCycles;
+	}
+	
+	public float getExcessCycles() {
+		return excessCycles;
+	}
 
 }

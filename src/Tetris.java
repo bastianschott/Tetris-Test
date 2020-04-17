@@ -80,7 +80,7 @@ public class Tetris extends JFrame {
 	/**
 	 * The current type of tile.
 	 */
-	private TileType currentType;
+	TileType currentType;
 	
 	/**
 	 * The next type of tile.
@@ -90,17 +90,17 @@ public class Tetris extends JFrame {
 	/**
 	 * The current column of our tile.
 	 */
-	private int currentCol;
+	int currentCol;
 	
 	/**
 	 * The current row of our tile.
 	 */
-	private int currentRow;
+	int currentRow;
 	
 	/**
 	 * The current rotation of our tile.
 	 */
-	private int currentRotation;
+	int currentRotation;
 		
 	/**
 	 * Ensures that a certain amount of time passes after a piece is
@@ -313,7 +313,9 @@ public class Tetris extends JFrame {
 					e.printStackTrace();
 				}
 			}
+			
 		}
+		
 	}
 	
 	/**
@@ -326,7 +328,9 @@ public class Tetris extends JFrame {
 		if(board.isValidAndEmpty(currentType, currentCol, currentRow + 1, currentRotation)) {
 			//Increment the current row if it's safe to do so.
 			currentRow++;
+			System.out.println(currentRow);
 		} else {
+			System.out.println("lul");
 			/*
 			 * We've either reached the bottom of the board, or landed on another piece, so
 			 * we need to add the piece to the board.
@@ -567,9 +571,4 @@ public class Tetris extends JFrame {
 	public int getCurrentRow() {
 		return currentRow;
 	}
-
-	public void setCurrentRow(int currentRow) {
-		this.currentRow = currentRow;
-	}
-
 }
