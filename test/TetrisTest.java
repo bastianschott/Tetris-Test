@@ -53,7 +53,6 @@ public class TetrisTest {
 			}
 				tetris.updateGame();
 				
-				// =====================================================================
 
 				if (tetris.board.isValidAndEmpty(tetris.currentType, tetris.currentCol, tetris.currentRow + 1,
 						tetris.currentRotation)) {
@@ -71,7 +70,6 @@ public class TetrisTest {
 
 			assertEquals(score, tetris.score);
 
-			// =====================================================================
 			startGameLoopEnd();
 		}
 	}
@@ -98,7 +96,6 @@ public class TetrisTest {
 
 		// Update the logic timer.
 		tetris.logicTimer.update();
-
 	}
 
 	private void startGameLoopEnd() {
