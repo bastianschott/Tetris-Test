@@ -22,7 +22,7 @@ public class Clock {
 	/**
 	 * The number of cycles that have elapsed and have not yet been polled.
 	 */
-	private int elapsedCycles;
+	int elapsedCycles;
 	
 	/**
 	 * The amount of excess time towards the next elapsed cycle.

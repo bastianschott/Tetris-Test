@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.awt.Robot;
 import java.awt.event.KeyAdapter;
@@ -13,6 +14,7 @@ public class TetrisTest {
 
 	private Tetris tetris;
 	Robot robot;
+	long start;
 
 	@Before
 	public void setUp() throws Exception {
@@ -25,66 +27,56 @@ public class TetrisTest {
 		tetris = null;
 	}
 
-	@Ignore
-	public void newTestUpdateGame() {
-		newMockStartGame();
-		assertEquals(tetris.logicTimer.getElapsedCycles(), tetris.getCurrentRow());
-
-		tetris.resetGame();
-
-		float gameSpeed = tetris.gameSpeed;
-
-		for (int i = 0; i < 200; i++) {
-			startGameLoop();
-			robot.keyPress(KeyEvent.VK_S);
-
-			int currentRow = tetris.getCurrentRow();
-
-			if (tetris.logicTimer.hasElapsedCycle()) {
-				if (tetris.board.isValidAndEmpty(tetris.currentType, tetris.currentCol, tetris.currentRow + 1,
-						tetris.currentRotation)) {
-					tetris.updateGame();
-					assertEquals(currentRow + 1, tetris.getCurrentRow());
-				} else {
-					
-					tetris.updateGame();
-					assertEquals(0, tetris.getCurrentRow());
-					assertEquals(gameSpeed+.035f, tetris.gameSpeed, 0.0001);
-					System.out.println("test");
-				}
-
-			}
-
-		}
-		System.out.println(tetris.getCurrentRow());
-
-	}
-
 	@Test
 	public void testUpdateGame() {
-
-		// Tests the first if(true) in the method
 		mockStartGame();
-		assertEquals(0, tetris.getCurrentRow());
 
-		// method is called when the ENTER key is pressed.
-		tetris.resetGame();
-		// Give the timer time to count up, so there is at least one new game cycle.
-		// sleep();
 
-		tetris.logicTimer.update();
+		robot.keyPress(KeyEvent.VK_ENTER);
 
-		if (tetris.logicTimer.hasElapsedCycle()) {
-			tetris.updateGame();
+		float gameSpeed = tetris.gameSpeed;
+		int score = 0;
+
+		for (int i = 0; i < 200; i++) {
+			startGameLoopBegin();
+
+			robot.keyPress(KeyEvent.VK_S);
+
+			if (tetris.logicTimer.hasElapsedCycle()) {
+				switch (tetris.board.checkLines()) {
+				case 0: break;
+				case 1: score += 100; break;
+				case 2: score += 200; break;
+				case 3: score += 400; break;
+				case 4: score += 800; break;
+				default: fail("wrong range of cleared lines");
+			}
+				tetris.updateGame();
+				
+				// =====================================================================
+
+				if (tetris.board.isValidAndEmpty(tetris.currentType, tetris.currentCol, tetris.currentRow + 1,
+						tetris.currentRotation)) {
+
+					int tilesize = tetris.currentType.name() == "TypeI" ? tetris.getCurrentRow()
+							: tetris.getCurrentRow();
+					assertEquals(tilesize, tetris.getCurrentRow());
+
+				} else {
+					tetris.updateGame();
+					assertEquals(0, tetris.logicTimer.elapsedCycles);
+				}
+			}
+
+
+			assertEquals(score, tetris.score);
+
+			// =====================================================================
+			startGameLoopEnd();
 		}
-
-		assertEquals(0, tetris.getCurrentRow());
-
-		tetris.updateGame();
-
 	}
 
-	void newMockStartGame() {
+	void mockStartGame() {
 		/*
 		 * Initialize our random number generator, logic timer, and new game variables.
 		 */
@@ -98,27 +90,18 @@ public class TetrisTest {
 		 */
 		tetris.logicTimer = new Clock(tetris.gameSpeed);
 		tetris.logicTimer.setPaused(true);
-
-		for (int i = 0; i < 1; i++) {
-			startGameLoop();
-		}
 	}
 
-	private void startGameLoop() {
+	private void startGameLoopBegin() {
 		// Get the time that the frame started.
-		long start = System.nanoTime();
+		start = System.nanoTime();
 
 		// Update the logic timer.
 		tetris.logicTimer.update();
 
-		/*
-		 * If a cycle has elapsed on the timer, we can update the game and move our
-		 * current piece down.
-		 */
-//		if (tetris.logicTimer.hasElapsedCycle()) {
-//			tetris.updateGame();
-//		}
+	}
 
+	private void startGameLoopEnd() {
 		// Decrement the drop cool down if necessary.
 		if (tetris.dropCooldown > 0) {
 			tetris.dropCooldown--;
@@ -140,32 +123,4 @@ public class TetrisTest {
 		}
 	}
 
-	void mockStartGame() {
-		tetris.random = new Random();
-		tetris.isNewGame = true;
-		tetris.gameSpeed = 1.0f;
-
-		tetris.logicTimer = new Clock(tetris.gameSpeed);
-		tetris.logicTimer.setPaused(true);
-
-		tetris.logicTimer.update();
-
-//		if (tetris.logicTimer.hasElapsedCycle()) {
-//			tetris.updateGame();
-//		}
-
-		if (tetris.dropCooldown > 0) {
-			tetris.dropCooldown--;
-		}
-
-		tetris.renderGame();
-
-	}
-
-	private static void sleep() {
-		try {
-			Thread.sleep(1000);
-		} catch (Exception e) {
-		}
-	}
 }

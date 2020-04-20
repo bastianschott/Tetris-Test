@@ -64,7 +64,7 @@ public class Tetris extends JFrame {
 	/**
 	 * The current score.
 	 */
-	private int score;
+	int score;
 	
 	/**
 	 * The random number generator. This is used to
@@ -328,9 +328,7 @@ public class Tetris extends JFrame {
 		if(board.isValidAndEmpty(currentType, currentCol, currentRow + 1, currentRotation)) {
 			//Increment the current row if it's safe to do so.
 			currentRow++;
-			System.out.println(currentRow);
 		} else {
-			System.out.println("lul");
 			/*
 			 * We've either reached the bottom of the board, or landed on another piece, so
 			 * we need to add the piece to the board.
@@ -570,5 +568,62 @@ public class Tetris extends JFrame {
 	
 	public int getCurrentRow() {
 		return currentRow;
+	}
+	
+	public void startGameInitialization() {
+		/*
+		 * Initialize our random number generator, logic timer, and new game variables.
+		 */
+		this.random = new Random();
+		this.isNewGame = true;
+		this.gameSpeed = 1.0f;
+		
+		/*
+		 * Setup the timer to keep the game from running before the user presses enter
+		 * to start it.
+		 */
+		this.logicTimer = new Clock(gameSpeed);
+		logicTimer.setPaused(true);
+		
+	}
+	
+	public void startGameWhile() {
+		
+		while(logicTimer.hasElapsedCycle()==false) {
+			//Get the time that the frame started.
+			long start = System.nanoTime();
+			
+			//Update the logic timer.
+			logicTimer.update();
+			
+			/*
+			 * If a cycle has elapsed on the timer, we can update the game and
+			 * move our current piece down.
+			 */
+			
+			/*
+			 * if(logicTimer.hasElapsedCycle()) { updateGame(); }
+			 */
+		
+			//Decrement the drop cool down if necessary.
+			if(dropCooldown > 0) {
+				dropCooldown--;
+			}
+			
+			//Display the window to the user.
+			renderGame();
+			
+			/*
+			 * Sleep to cap the framerate.
+			 */
+			long delta = (System.nanoTime() - start) / 1000000L;
+			if(delta < FRAME_TIME) {
+				try {
+					Thread.sleep(FRAME_TIME - delta);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
