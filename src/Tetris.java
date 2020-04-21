@@ -23,7 +23,7 @@ public class Tetris extends JFrame {
 	/**
 	 * The number of milliseconds per frame.
 	 */
-	static final long FRAME_TIME = 1000L / 50L;
+	private static final long FRAME_TIME = 1000L / 50L;
 	
 	/**
 	 * The number of pieces that exist.
@@ -33,12 +33,12 @@ public class Tetris extends JFrame {
 	/**
 	 * The BoardPanel instance.
 	 */
-	BoardPanel board;
+	private BoardPanel board;
 	
 	/**
 	 * The SidePanel instance.
 	 */
-	SidePanel side;
+	private SidePanel side;
 	
 	/**
 	 * Whether or not the game is paused.
@@ -49,7 +49,7 @@ public class Tetris extends JFrame {
 	 * Whether or not we've played a game yet. This is set to true
 	 * initially and then set to false when the game starts.
 	 */
-	boolean isNewGame;
+	private boolean isNewGame;
 	
 	/**
 	 * Whether or not the game is over.
@@ -64,23 +64,23 @@ public class Tetris extends JFrame {
 	/**
 	 * The current score.
 	 */
-	int score;
+	private int score;
 	
 	/**
 	 * The random number generator. This is used to
 	 * spit out pieces randomly.
 	 */
-	Random random;
+	private Random random;
 	
 	/**
 	 * The clock that handles the update logic.
 	 */
-	Clock logicTimer;
+	private Clock logicTimer;
 				
 	/**
 	 * The current type of tile.
 	 */
-	TileType currentType;
+	private TileType currentType;
 	
 	/**
 	 * The next type of tile.
@@ -90,28 +90,28 @@ public class Tetris extends JFrame {
 	/**
 	 * The current column of our tile.
 	 */
-	int currentCol;
+	private int currentCol;
 	
 	/**
 	 * The current row of our tile.
 	 */
-	int currentRow;
+	private int currentRow;
 	
 	/**
 	 * The current rotation of our tile.
 	 */
-	int currentRotation;
+	private int currentRotation;
 		
 	/**
 	 * Ensures that a certain amount of time passes after a piece is
 	 * spawned before we can drop it.
 	 */
-	int dropCooldown;
+	private int dropCooldown;
 	
 	/**
 	 * The speed of the game.
 	 */
-	float gameSpeed;
+	private float gameSpeed;
 		
 	/**
 	 * Creates a new Tetris instance. Sets up the window's properties,
@@ -264,7 +264,7 @@ public class Tetris extends JFrame {
 	/**
 	 * Starts the game running. Initializes everything and enters the game loop.
 	 */
-	void startGame() {
+	private void startGame() {
 		/*
 		 * Initialize our random number generator, logic timer, and new game variables.
 		 */
@@ -565,9 +565,64 @@ public class Tetris extends JFrame {
 		Tetris tetris = new Tetris();
 		tetris.startGame();
 	}
-	
+
+	public static long getFrameTime() {
+		return FRAME_TIME;
+	}
+
+	public BoardPanel getBoardPanel() {
+		return board;
+	}
+
+	public void setIsNewGame(boolean isNewGame) {
+		this.isNewGame = isNewGame;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setRandom(Random random) {
+		this.random = random;
+	}
+
+	public Clock getLogicTimer() {
+		return logicTimer;
+	}
+
+	public void setLogicTimer(Clock logicTimer) {
+		this.logicTimer = logicTimer;
+	}
+
+	public TileType getCurrentType() {
+		return currentType;
+	}
+
+	public int getCurrentCol() {
+		return currentCol;
+	}
+
 	public int getCurrentRow() {
 		return currentRow;
 	}
 
+	public int getCurrentRotation() {
+		return currentRotation;
+	}
+
+	public int getDropCooldown() {
+		return dropCooldown;
+	}
+
+	public void setDropCooldown(int dropCooldown) {
+		this.dropCooldown = dropCooldown;
+	}
+
+	public float getGameSpeed() {
+		return gameSpeed;
+	}
+
+	public void setGameSpeed(float gameSpeed) {
+		this.gameSpeed = gameSpeed;
+	}
 }

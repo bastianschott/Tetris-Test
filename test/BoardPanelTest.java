@@ -1,9 +1,6 @@
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BoardPanelTest {
@@ -14,37 +11,58 @@ public class BoardPanelTest {
 	@Before
 	public void setUp() throws Exception {
 		tetris = new Tetris();
+
+		// type is always a square
 		type = TileType.values()[3];
 	}
 
+	/**
+	 * Check the bounds of the board.
+	 */
 	@Test
 	public void testIsValidAndEmpty() {
+		// check the left border
 		assertFalse(bp.isValidAndEmpty(type, -1, 0, 0));
-		assertFalse(bp.isValidAndEmpty(type, 11, 0, 0));
 		assertTrue(bp.isValidAndEmpty(type, 0, 0, 0));
+
+		// check the right border
+		assertFalse(bp.isValidAndEmpty(type, 9, 0, 0));
 		assertTrue(bp.isValidAndEmpty(type, 8, 0, 0));
-		
+
+		// check the upper border
 		assertFalse(bp.isValidAndEmpty(type, 0, -1, 0));
-		assertFalse(bp.isValidAndEmpty(type, 0, 21, 0));
 		assertTrue(bp.isValidAndEmpty(type, 0, 0, 0));
-		assertTrue(bp.isValidAndEmpty(type, 0, 1, 0));
-		
-		testAddPiece();
+
+		// check the bottom border
+		assertFalse(bp.isValidAndEmpty(type, 0, 21, 0));
+		assertTrue(bp.isValidAndEmpty(type, 0, 20, 0));
 	}
 
+	/**
+	 * Adds a piece and then checks if the piece occupies some cells correctly
+	 */
 	@Test
 	public void testAddPiece() {
-		tetris.board.addPiece(type, 5, 5, 0);
-		assertTrue(tetris.board.isValidAndEmpty(type, 1, 1, 0));
-		assertFalse(tetris.board.isValidAndEmpty(type, 5, 5, 0));
-		assertFalse(tetris.board.isValidAndEmpty(type, 5, 6, 1));
-		assertFalse(tetris.board.isValidAndEmpty(type, 6, 6, 2));
-		assertFalse(tetris.board.isValidAndEmpty(type, 6, 5, 3));
+		tetris.getBoardPanel().addPiece(type, 5, 5, 0);
+
+		// check 1,1 empty
+		assertTrue(tetris.getBoardPanel().isValidAndEmpty(type, 1, 1, 0));
+
+		// check 5,5 occupied
+		assertFalse(tetris.getBoardPanel().isValidAndEmpty(type, 5, 5, 0));
+
+		// check 5,6 occupied
+		assertFalse(tetris.getBoardPanel().isValidAndEmpty(type, 5, 6, 1));
+
+		// check 6,6 occupied
+		assertFalse(tetris.getBoardPanel().isValidAndEmpty(type, 6, 6, 2));
+
+		// check 6,5 occupied
+		assertFalse(tetris.getBoardPanel().isValidAndEmpty(type, 6, 5, 3));
 	}
 
 	@Test
 	public void testCheckLines() {
-		
 		assertEquals(0, bp.checkLines());
 	}
 
