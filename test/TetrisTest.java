@@ -24,35 +24,48 @@ public class TetrisTest {
 
 	@After
 	public void tearDown() throws Exception {
+		tetris.setVisible(false);
+		tetris.dispose();
 		tetris = null;
 	}
 
 	@Test
 	public void testUpdateGame() {
+		// initialize game
 		mockStartGame();
 
-
+		// press enter to start the game
 		robot.keyPress(KeyEvent.VK_ENTER);
 
 		float gameSpeed = tetris.gameSpeed;
-		int score = 0;
+		
+		// let the game run until a new block falls down to actualize the board
+		startGameLoopBegin();
+		startGameLoopEnd();
+		startGameLoopBegin();
+		startGameLoopEnd();
+
+		// add square blocks to the bottom 2 rows
+		for (int j = 0; j < 10; j += 2) {
+
+			startGameLoopBegin();
+			tetris.board.addPiece(TileType.values()[3], j, 20, 0);
+			if (tetris.logicTimer.hasElapsedCycle()) {
+				tetris.updateGame();
+			}
+			startGameLoopEnd();
+		}
+
 
 		for (int i = 0; i < 200; i++) {
 			startGameLoopBegin();
 
 			robot.keyPress(KeyEvent.VK_S);
+			
 
 			if (tetris.logicTimer.hasElapsedCycle()) {
-				switch (tetris.board.checkLines()) {
-				case 0: break;
-				case 1: score += 100; break;
-				case 2: score += 200; break;
-				case 3: score += 400; break;
-				case 4: score += 800; break;
-				default: fail("wrong range of cleared lines");
-			}
+
 				tetris.updateGame();
-				
 
 				if (tetris.board.isValidAndEmpty(tetris.currentType, tetris.currentCol, tetris.currentRow + 1,
 						tetris.currentRotation)) {
@@ -67,11 +80,10 @@ public class TetrisTest {
 				}
 			}
 
-
-			assertEquals(score, tetris.score);
-
 			startGameLoopEnd();
 		}
+		
+		assertEquals(200, tetris.score);
 	}
 
 	void mockStartGame() {
